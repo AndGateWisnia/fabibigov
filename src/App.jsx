@@ -1,30 +1,29 @@
 import { useEffect, useState, useRef } from "react";
 import SearchBar from "./SearchBar";
 
-function Meskie() {
+function App({ ids, sexLetter }) {
   const [rows, setRows] = useState([]);
   const [filtr, setFiltr] = useState("");
   const [wystReverse, setWystReverse] = useState(false);
   const [occurReverse, setOccurReverse] = useState(false);
-  const ids = [1159536, 63900, 54099, 44825, 36398, 28021, 21454];
-  const hashmap = new Map();
   const hashmapRef = useRef(new Map());
 
   useEffect(() => {
     const fetchData = async () => {
+      const hashmap = hashmapRef.current;
+
       for (const id of ids) {
         let page = 1;
-        let newRows = [];
 
         while (true) {
           try {
             const res = await fetch(`https://api.dane.gov.pl/1.4/resources/${id}/data?per_page=50&page=${page}`);
             const json = await res.json();
             if (!json.data || json.data.length === 0) break;
+
             for (const row of json.data) {
               const key = row.attributes.col1.val;
               const value = row.attributes.col3.val;
-
               hashmap.set(key, (hashmap.get(key) || 0) + value);
             }
             page++;
@@ -33,16 +32,20 @@ function Meskie() {
             break;
           }
         }
-        while(true){
-        try {
+
+        page = 1;
+
+        while (true) {
+          try {
             const res = await fetch(`https://api.dane.gov.pl/1.4/resources/21458/data?per_page=50&page=${page}`);
             const json = await res.json();
             if (!json.data || json.data.length === 0) break;
+
             for (const row of json.data) {
               const key = row.attributes.col2.val;
               const value = row.attributes.col3.val;
 
-              if(row.attributes.col4.val == "M") {
+              if (row.attributes.col4.val === sexLetter) {
                 hashmap.set(key, (hashmap.get(key) || 0) + value);
               }
             }
@@ -53,12 +56,13 @@ function Meskie() {
           }
         }
       }
-      hashmapRef.current = hashmap;
+
       const sorted = Array.from(hashmap.entries()).sort((a, b) => b[1] - a[1]);
       setRows(sorted);
     };
+
     fetchData();
-  }, []);
+  }, [ids, sexLetter]);
 
   function sortByOccurences() {
     const sorted = [...rows].sort((a, b) =>
@@ -119,4 +123,4 @@ function Meskie() {
   );
 }
 
-export default Meskie;
+export default App;

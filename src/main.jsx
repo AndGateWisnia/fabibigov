@@ -5,6 +5,6 @@ import FabibiGov from "./FabibiGov.jsx";
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <FabibiGov />
+    <App />
   </StrictMode>,
 )

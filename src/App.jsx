@@ -4,14 +4,28 @@ function App() {
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
-    for (let page = 1; page < 20; page++) {
-      fetch(`https://api.dane.gov.pl/1.4/resources/1159538/data?per_page=50&page=${page}`)
-        .then(res => res.json())
-        .then(json => {
-          setRows(prev => [...prev, ...json.data]);
-        })
-        .catch(err => console.error(err));
-    }
+    const fetchData = async () => {
+      const newRows = [];
+      for (let page = 1; page < 20; page++) {
+        try {
+          const res = await fetch(`https://api.dane.gov.pl/1.4/resources/1159538/data?per_page=50&page=${page}`);
+          const json = await res.json();
+          newRows.push(...json.data);
+        } catch (err) {
+          console.error(err);
+        }
+      }
+
+      newRows.sort((a, b) => {
+        const aValue = a.attributes.col3.val;
+        const bValue = b.attributes.col3.val;
+
+        return bValue - aValue;
+      });
+      setRows(newRows);
+    };
+
+    fetchData();
   }, []);
 
   return (

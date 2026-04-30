@@ -38,6 +38,7 @@ function App({ ids, sexLetter, type }) {
                 const value = row.attributes.col3.val;
                 hashmap.set(key, (hashmap.get(key) || 0) + value);
               }
+            }
             else{
               for (const row of json.data) {
                 const key = row.attributes.col1.val;

@@ -18,6 +18,7 @@ function App({ ids, sexLetter, type }) {
   
         if (Date.now() - parsed.timestamp < cacheTTL) {
           setRows(parsed.data);
+          const hashmap = hashmapRef.current;
           return; // użyj cache i NIE fetchuj
         }
       }

@@ -10,6 +10,17 @@ function App({ ids, sexLetter }) {
 
   useEffect(() => {
     const fetchData = async () => {
+      const cacheKey = `data-cache-${ids.join(",")}-${sexLetter}`;
+      const cacheTTL = 1000 * 60 * 60 * 48; // 48h
+      const cached = localStorage.getItem(cacheKey);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+  
+        if (Date.now() - parsed.timestamp < cacheTTL) {
+          setRows(parsed.data);
+          return; // użyj cache i NIE fetchuj
+        }
+      }
       const hashmap = hashmapRef.current;
 
       for (const id of ids) {
@@ -59,6 +70,14 @@ function App({ ids, sexLetter }) {
 
       const sorted = Array.from(hashmap.entries()).sort((a, b) => b[1] - a[1]);
       setRows(sorted);
+
+      localStorage.setItem(
+      cacheKey,
+      JSON.stringify({
+          data: sorted,
+          timestamp: Date.now()
+        })
+      );
     };
 
     fetchData();

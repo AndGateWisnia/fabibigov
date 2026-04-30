@@ -32,11 +32,18 @@ function App({ ids, sexLetter, type }) {
             const res = await fetch(`https://api.dane.gov.pl/1.4/resources/${id}/data?per_page=50&page=${page}`);
             const json = await res.json();
             if (!json.data || json.data.length === 0) break;
-
-            for (const row of json.data) {
-              const key = row.attributes.col1.val;
-              const value = row.attributes.col3.val;
-              hashmap.set(key, (hashmap.get(key) || 0) + value);
+            if (type == "imie"){
+              for (const row of json.data) {
+                const key = row.attributes.col1.val;
+                const value = row.attributes.col3.val;
+                hashmap.set(key, (hashmap.get(key) || 0) + value);
+              }
+            else{
+              for (const row of json.data) {
+                const key = row.attributes.col1.val;
+                const value = row.attributes.col2.val;
+                hashmap.set(key, (hashmap.get(key) || 0) + value);
+              }
             }
             page++;
           } catch (err) {

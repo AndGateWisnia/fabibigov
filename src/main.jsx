@@ -8,8 +8,14 @@ const root = document.getElementById("root");
 ReactDOM.createRoot(root).render(
   <BrowserRouter>
     <Routes>
-      <Route path="/damskie" element={<App ids={[1159538, 63899, 54100, 44824, 36394, 28021, 21455]} sexLetter="K"/>}/>
-      <Route path="/meskie" element={<App ids={[1159536, 63900, 54099, 44825, 36398, 28020, 21454]} sexLetter="M"/>}/>
+      <Route path="/damskie">
+          <Route path="imiona" element={<App ids={[1159538, 63899, 54100, 44824, 36394, 28021, 21455]} sexLetter="K"/>}/>
+          <Route path="nazwiska" element={<App ids={[1148811]} sexLetter="K"/>}/>
+      </Route> 
+      <Route path="/meskie">
+          <Route path="imiona" element={<App ids={[1159536, 63900, 54099, 44825, 36398, 28020, 21454]} sexLetter="M"/>}/>
+          <Route path="nazwiska" element={<App ids={[1148808]} sexLetter="M"/>}/>
+      </Route> 
     </Routes>
   </BrowserRouter>,
 );

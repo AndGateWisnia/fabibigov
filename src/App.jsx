@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import SearchBar from "./SearchBar";
 
-function App({ ids, sexLetter }) {
+function App({ ids, sexLetter, type }) {
   const [rows, setRows] = useState([]);
   const [filtr, setFiltr] = useState("");
   const [wystReverse, setWystReverse] = useState(false);
@@ -46,24 +46,26 @@ function App({ ids, sexLetter }) {
 
         page = 1;
 
-        while (true) {
-          try {
-            const res = await fetch(`https://api.dane.gov.pl/1.4/resources/21458/data?per_page=50&page=${page}`);
-            const json = await res.json();
-            if (!json.data || json.data.length === 0) break;
-
-            for (const row of json.data) {
-              const key = row.attributes.col2.val;
-              const value = row.attributes.col3.val;
-
-              if (row.attributes.col4.val === sexLetter) {
-                hashmap.set(key, (hashmap.get(key) || 0) + value);
+        if (type == "imie"){
+          while (true) {
+            try {
+              const res = await fetch(`https://api.dane.gov.pl/1.4/resources/21458/data?per_page=50&page=${page}`);
+              const json = await res.json();
+              if (!json.data || json.data.length === 0) break;
+  
+              for (const row of json.data) {
+                const key = row.attributes.col2.val;
+                const value = row.attributes.col3.val;
+  
+                if (row.attributes.col4.val === sexLetter) {
+                  hashmap.set(key, (hashmap.get(key) || 0) + value);
+                }
               }
+              page++;
+            } catch (err) {
+              console.error(err);
+              break;
             }
-            page++;
-          } catch (err) {
-            console.error(err);
-            break;
           }
         }
       }

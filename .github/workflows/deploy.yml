@@ -4,9 +4,6 @@ on:
    push:
       branches:
          - master  # Runs when pushing to master
-   commit:
-      branches:
-         - master
 
 permissions:
    contents: write  # Ensure GitHub Actions can push to gh-pages

@@ -6,7 +6,7 @@ import App from "./App.jsx";
 const root = document.getElementById("root");
 
 ReactDOM.createRoot(root).render(
-  <HashRouter>
+  <HashRouter basename="fabibigov">
     <Routes>
       <Route path="/damskie">
           <Route path="imiona" element={<App ids={[1159538, 63899, 54100, 44824, 36394, 28021, 21455]} sexLetter="K" type="imie"/>}/>

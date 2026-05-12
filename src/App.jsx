@@ -27,7 +27,7 @@ function App({ ids, sexLetter, type }) {
       for (const id of ids) {
         let page = 1;
 
-        while (true) {
+        for(let page = 1; page <= 200; page++) {
           try {
             const res = await fetch(`https://api.dane.gov.pl/1.4/resources/${id}/data?per_page=50&page=${page}`);
             const json = await res.json();
@@ -46,7 +46,6 @@ function App({ ids, sexLetter, type }) {
                 hashmap.set(key, (hashmap.get(key) || 0) + value);
               }
             }
-            page++;
           } catch (err) {
             console.error(err);
             break;
@@ -56,7 +55,7 @@ function App({ ids, sexLetter, type }) {
         page = 1;
 
         if (type == "imie"){
-          while (true) {
+          for(let page = 1; page <= 200; page++){
             try {
               const res = await fetch(`https://api.dane.gov.pl/1.4/resources/21458/data?per_page=50&page=${page}`);
               const json = await res.json();
@@ -70,7 +69,6 @@ function App({ ids, sexLetter, type }) {
                   hashmap.set(key, (hashmap.get(key) || 0) + value);
                 }
               }
-              page++;
             } catch (err) {
               console.error(err);
               break;
